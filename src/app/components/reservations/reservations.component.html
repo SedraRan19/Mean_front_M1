@@ -1,0 +1,229 @@
+<mat-card class="no-shadow">
+  <mat-card-content>
+    <mat-toolbar>
+      <h3>Reservations</h3>
+      <span class="example-spacer"></span>
+      <button mat-raised-button class="me-8 mb-8 ml-auto" color="primary" (click)="openNewReservation()" >New</button>
+    </mat-toolbar>
+  </mat-card-content>
+</mat-card>
+
+<div class="card" [ngClass]="{'visible': isVisibleFrom, 'hidden': !isVisibleFrom}" >
+  <div class="card-body">
+    <h4 class="mb-32">Appointment</h4>
+    <form (ngSubmit)="onSubmit()" >
+    
+    <mat-form-field class="me-24 fs-16" appearance="outline">
+      <mat-label>Client</mat-label>
+      <mat-select [(ngModel)]="newAppoint.clientId" name="client" >
+        <mat-option *ngFor="let client of clients" [value]="client._id">
+          {{ client.firstName+' '+client.lastName }} <!-- Remplacez "name" par le nom de la propriété contenant le nom du client -->
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    
+
+    <mat-form-field class="me-24 fs-16" appearance="outline" *ngIf="isEditEnabled" >
+      <mat-label>Employee</mat-label>
+      <mat-select [(ngModel)]="newAppoint.requestedServices[0].selectedEmployee" name="employee" >
+        <mat-option *ngFor="let Employee of employees" [value]="Employee._id">
+          {{ Employee.firstName+' '+Employee.lastName }} 
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="me-24 fs-16" appearance="outline" *ngIf="isEditEnabled">
+      <mat-label>Service</mat-label>
+      <mat-select [(ngModel)]="newAppoint.requestedServices[0].serviceId" name="service" >
+        <mat-option *ngFor="let service of services" [value]="service._id">
+          {{ service.name }} 
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="me-24 fs-16" appearance="outline">
+      <mat-label>Date</mat-label>
+      <input matInput type="datetime-local" [(ngModel)]="newAppoint.appointmentDate" name="appointmentDate" >
+    </mat-form-field>
+
+    <mat-form-field class="me-24 fs-16" appearance="outline">
+      <mat-label>Status</mat-label>
+      <mat-select [(ngModel)]="newAppoint.status" name="Status">
+        <mat-option value="Pending">Pending</mat-option>
+        <mat-option value="Confirmed">Confirmed</mat-option>
+        <mat-option value="Cancelled">Cancelled</mat-option>
+      </mat-select>
+    </mat-form-field>
+    
+    <button mat-raised-button class="me-8 mb-8" type="button" (click)="closeNewReservation()" >Close</button>
+    <button mat-raised-button class="me-8 mb-8 ml-auto" type="submit" color="primary" >Submit</button>
+  </form>
+  </div>
+</div>
+
+<div class="card" [ngClass]="{'visible': isFormService, 'hidden': !isFormService}" >
+  <div class="card-body">
+    <h4 class="mb-32">Service</h4>
+    <form (ngSubmit)="onSubmitService()" >
+  
+    <mat-form-field class="me-24 fs-16" appearance="outline"  >
+      <mat-label>Employee</mat-label>
+      <mat-select [(ngModel)]="newService.requestedServices[0].selectedEmployee" name="employee" >
+        <mat-option *ngFor="let Employee of employees" [value]="Employee._id">
+          {{ Employee.firstName+' '+Employee.lastName }} 
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="me-24 fs-16" appearance="outline" >
+      <mat-label>Service</mat-label>
+      <mat-select [(ngModel)]="newService.requestedServices[0].serviceId" name="service" >
+        <mat-option *ngFor="let service of services" [value]="service._id">
+          {{ service.name }} 
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    
+    <button mat-raised-button class="me-8 mb-8" type="button" (click)="closeNewServise()" >Close</button>
+    <button mat-raised-button class="me-8 mb-8 ml-auto" type="submit" color="primary" >Submit</button>
+  </form>
+  </div>
+</div>
+
+<div *ngIf="loading">
+  <mat-spinner></mat-spinner>  
+</div>
+
+  <mat-card class="w-100" *ngIf="isServiceVisible && selectedAppointment && selectedAppointment[0]">
+    <mat-card-header>
+      <div class="close-button">
+        <button mat-icon-button (click)="closeServices()" >
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </mat-card-header>
+    <mat-card-content>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Employer</th>
+            <th>Service</th>
+            <th>Date</th>
+            <th>Heure</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let req of selectedAppointment[0].requestedServices; let i = index">
+            <td>{{ i + 1 }}</td>
+            <td>{{ req.selectedEmployee.firstName + ' ' + req.selectedEmployee.lastName }}</td>
+            <td>{{ req.serviceId.name }}</td>
+            <td>{{ selectedAppointment[0].appointmentDate | date: 'yyyy-MM-dd' }}</td>
+            <td>{{ selectedAppointment[0].appointmentDate | date: 'HH:mm' }}</td>
+            <td>
+              <button mat-raised-button class="me-8 mb-8" color="warn" (click)="onDeleteRequestedService(selectedAppointment[0]._id,req._id)" >Delete</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </mat-card-content>
+  </mat-card>    
+
+<mat-card class="w-100">
+  <mat-card-content>
+    <div class="row">
+      <mat-form-field>
+        <input matInput placeholder="Search" [(ngModel)]="searchTerm" (input)="onSearchChange()">
+      </mat-form-field>
+    </div>
+    <div class="row">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Client</th>
+            <th>Employer</th>
+            <th>Service</th>
+            <th>Date</th>
+            <th>Heure</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let res of appointments;let i = index ">
+            <td>{{ i + 1 }}</td>
+            <td>{{ res.clientId.firstName + ' ' + res.clientId.lastName }}</td>
+            <td>
+              <ng-container *ngIf="res.requestedServices && res.requestedServices.length > 0">
+                <div *ngFor="let service of res.requestedServices">
+                  {{ service.selectedEmployee.firstName + ' ' + service.selectedEmployee.lastName }}
+                </div>
+              </ng-container>
+            </td>
+            <td>
+              <ng-container *ngIf="res.requestedServices && res.requestedServices.length > 0">
+                <div *ngFor="let service of res.requestedServices">
+                  {{ service.serviceId.name }}
+                </div>
+              </ng-container>
+            </td>
+            <td [style.color]="isDatePassed(res.appointmentDate) ? 'red' : 'inherit'">{{ res.appointmentDate | date: 'yyyy-MM-dd' }}</td>
+            <td>{{ res.appointmentDate | date: 'HH:mm' }}</td>
+            <td>
+              <span class="badge rounded-pill" [ngClass]="{
+                'badge-success': res.status === 'Confirmed',
+                'badge-warning': res.status === 'Pending',
+                'badge-danger': res.status === 'Cancelled'
+              }">{{ res.status }}</span>
+            </td>
+            <td>
+              <button mat-icon-button (click)="onAdd(res)">
+                <mat-icon>add</mat-icon>
+              </button>
+              <button mat-icon-button color="accent" (click)="onService(res._id)">
+                <mat-icon>build</mat-icon>
+              </button>
+              <button mat-icon-button color="primary" (click)="onEdit(res)">
+                <mat-icon>edit</mat-icon>
+              </button>
+              <button mat-icon-button color="warn" (click)="onDelete(res._id)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </td>          
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </mat-card-content>
+</mat-card>
+
+
+<!-- <mat-card class="w-100">
+    <mat-card-content>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Sun</th>
+            <th>Mon</th>
+            <th>Tue</th>
+            <th>Wed</th>
+            <th>Thu</th>
+            <th>Fri</th>
+            <th>Sat</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let week of calendar">
+            <ng-container *ngFor="let day of week">
+              <td>{{ day }}</td>
+            </ng-container>
+          </tr>
+        </tbody>
+      </table>
+    </mat-card-content>
+  </mat-card>
+   -->
+
+  

@@ -1,0 +1,38 @@
+<div *ngIf="message != '' " class="alert alert-danger alert-text-danger d-flex fs-14 align-items-center rounded mb-16" role="alert">
+  <i-feather name="alert-circle" class="text-danger feather-base me-12"></i-feather>
+  {{message}}
+</div>
+
+<div *ngIf="validationErrors.length > 0" class="alert alert-danger alert-text-danger d-flex fs-14 align-items-center rounded mb-16" role="alert">
+  <i-feather name="alert-circle" class="text-danger feather-base me-12"></i-feather>
+  {{validationErrors}}
+</div>
+
+<div class="card">
+    <div class="card-body">
+      <h4 class="mb-32">Connexion</h4>
+      <form>
+        <mat-form-field class="me-24 fs-16" >
+          <mat-label>Email</mat-label>
+          <input matInput type="email" placeholder="Entez votre email" name="email" [(ngModel)]="email">
+        </mat-form-field>
+  
+        <mat-form-field class="me-24 fs-16" >
+          <mat-label>Mot de passe</mat-label>
+          <input matInput type="password" placeholder="Entrez votre mot de passe" name="password" [(ngModel)]="password">
+        </mat-form-field>
+        
+        <button 
+          mat-raised-button class="me-8 mb-8" color="primary" 
+          type="submit" [disabled]="isSubmitting || (password.length <= 0 || email.length <= 0)" (click)="loginAction()">Se connecter
+        </button>
+      </form>
+
+      <p class="text-center">Pas de compte ?
+        <a routerLink="/inscription-client" href="/inscription-client"> 
+        S'inscrire
+        </a>
+      </p>
+
+    </div>
+  </div>

@@ -1,0 +1,54 @@
+<mat-card class="no-shadow">
+    <mat-card-content>
+        <mat-toolbar>
+            <h3>My Account</h3>       
+            <button mat-raised-button class="me-8 mb-8 ml-auto" color="primary" (click)="openEditPassword()" >Edit password</button>
+        </mat-toolbar>
+    </mat-card-content>
+</mat-card>
+
+<div class="card" [ngClass]="{'visible': isVisibleFrom, 'hidden': !isVisibleFrom}" >
+    <div class="card-body">
+      <h4 class="mb-32">Employee</h4>
+      <div class="alert {{ alerts.border }} {{ alerts.color }} background-none d-flex fs-14 align-items-center rounded mb-16"
+      role="alert" *ngIf="alerts.message != ''">
+      <i-feather name="{{ alerts.icon }}" class="{{ alerts.iconColor }} feather-base me-12"></i-feather>
+      {{ alerts.message }}
+      </div>
+      <form (ngSubmit)="onSumbit()">
+      
+      <mat-form-field class="me-24 fs-16" appearance="outline">
+        <mat-label>First name</mat-label>
+        <input matInput [(ngModel)]="emp.firstName" name="firstName" required >
+      </mat-form-field>
+  
+      <mat-form-field class="me-24 fs-16" appearance="outline">
+        <mat-label>Last name</mat-label>
+        <input matInput [(ngModel)]="emp.lastName" name="lastName" required >
+      </mat-form-field>
+  
+      <mat-form-field class="me-24 fs-16" appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput [(ngModel)]="emp.email" name="email" type="email" required>
+      </mat-form-field>
+
+      <mat-form-field class="me-24 fs-16" appearance="outline">
+        <mat-label>Contact</mat-label>
+        <input matInput [(ngModel)]="emp.contact" name="contact" type="email" required>
+      </mat-form-field>
+
+      <mat-form-field class="me-24 fs-16" appearance="outline" *ngIf="isFormEdit" >
+        <mat-label>Confirm password</mat-label>
+        <input matInput [(ngModel)]="emp.confirmPassword" name="confirmPassword" type="password" required>
+      </mat-form-field>
+
+      <mat-form-field class="me-24 fs-16" appearance="outline" *ngIf="isFormEdit" >
+        <mat-label>Password</mat-label>
+        <input matInput [(ngModel)]="emp.password" name="password" type="password" required>
+      </mat-form-field>
+  
+      <button mat-raised-button class="me-8 mb-8 ml-auto" color="primary" type="submit" >Submit</button>
+    </form>
+
+    </div>
+  </div>

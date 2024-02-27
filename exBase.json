@@ -1,0 +1,89 @@
+// Users Collection
+  {
+    "_id": ObjectId("user123"),
+    "username": "john_doe",
+    "password": "hashed_password",
+    "email": "mailto:john@example.com",
+    "role": "client"
+  }
+  
+  // Clients Collection
+  {
+    "_id": ObjectId("client456"),
+    "userId": ObjectId("user123"),
+    "preferences": {
+      "service": "Coupe",
+      "employee": "Stylist1"
+    },
+    "appointments": [
+      {
+        "_id": ObjectId("appointment789"),
+        "employeeId": ObjectId("employee001"),
+        "serviceId": ObjectId("serviceA"),
+        "date": ISODate("2024-02-01T10:00:00Z"),
+        "status": "scheduled"
+      }
+    ]
+  }
+  
+  // Employees Collection
+  {
+    "_id": ObjectId("employee001"),
+    "userId": ObjectId("user456"),
+    "schedule": {
+      "monday": ["09:00-18:00"]
+    },
+    "commissionPercentage": 15,
+    "tasks": [
+      {
+        "_id": ObjectId("task001"),
+        "serviceId": ObjectId("serviceA"),
+        "date": ISODate("2024-02-01T10:00:00Z")
+      }
+    ]
+  }
+  
+  // Managers Collection
+  {
+    "_id": ObjectId("manager789"),
+    "userId": ObjectId("user789"),
+    "staff": [ObjectId("employee001"), ObjectId("employee002")],
+    "services": [ObjectId("serviceA"), ObjectId("serviceB")],
+    "statistics": {
+      "averageWorkTime": {
+        "employee001": 7.5,
+        "employee002": 8.0
+      },
+      "reservationsPerDay": {
+        "2024-02-01": 20,
+      },
+      "revenuePerDay": {
+        "2024-02-01": 1500,
+      },
+      "profitPerMonth": {
+        "2024-02": 30000
+      }
+    }
+  }
+  
+  // Services Collection
+  {
+    "_id": ObjectId("serviceA"),
+    "name": "Haircut",
+    "price": 50,
+    "duration": 60,
+    "commissionPercentage": 15
+  }
+  
+  // Appointments Collection
+  {
+    "_id": ObjectId("appointment789"),
+    "clientId": ObjectId("client456"),
+    "employeeId": ObjectId("employee001"),
+    "serviceId": ObjectId("serviceA"),
+    "date": ISODate("2024-02-01T10:00:00Z"),
+    "status": "scheduled"
+  }
+  
+  // Expenses Collection
+  

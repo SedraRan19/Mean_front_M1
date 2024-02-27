@@ -1,0 +1,34 @@
+<div class="row">
+    <div class="col-12">
+      <mat-card>
+        <mat-card-content>
+          <h4 class="mb-32">Employee Tasks</h4>
+          <mat-tab-group mat-stretch-tabs=" ">
+            <mat-tab *ngFor="let employee of employees" [label]="employee.firstName">
+              <mat-card-content>
+                <div class="table-responsive">
+                  <table class="table ">
+                    <thead>
+                      <tr>
+                        <th>Service</th>
+                        <th>Date</th>
+                        <th>Commission</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let task of employee.tasksCompleted">
+                        <td>{{ task.serviceId }}</td>
+                        <td>{{ task.date | date:'medium' }}</td>
+                        <td>{{ task.commissionAmount }}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </mat-card-content>
+            </mat-tab>
+          </mat-tab-group>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  

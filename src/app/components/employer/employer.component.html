@@ -1,0 +1,127 @@
+<mat-card class="no-shadow">
+    <mat-card-content>
+      <mat-toolbar>
+        <h3>Employees</h3>
+        <span class="example-spacer"></span>
+        <button mat-raised-button class="me-8 mb-8 ml-auto" color="primary" (click)="openNewEmployer()" >New</button>
+      </mat-toolbar>
+    </mat-card-content>
+  </mat-card>
+
+  <div class="card" [ngClass]="{'visible': isVisibleFrom, 'hidden': !isVisibleFrom}" >
+    <div class="card-body">
+      <h4 class="mb-32">Employee</h4>
+      <div class="alert alert-border-danger alert-text-danger background-none d-flex fs-14 align-items-center rounded mb-16" role="alert" *ngIf="errorMessage != ''">
+        <i-feather name="alert-circle" class="text-danger feather-base me-12"></i-feather>
+        {{ errorMessage }}
+      </div>
+      <form (ngSubmit)="onSumbit()">
+      
+      <mat-form-field class="me-24 fs-16" appearance="outline">
+        <mat-label>First name</mat-label>
+        <input matInput [(ngModel)]="newEmp.firstName" name="firstName" required >
+      </mat-form-field>
+  
+      <mat-form-field class="me-24 fs-16" appearance="outline">
+        <mat-label>Last name</mat-label>
+        <input matInput [(ngModel)]="newEmp.lastName" name="lastName" required >
+      </mat-form-field>
+  
+      <mat-form-field class="me-24 fs-16" appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput [(ngModel)]="newEmp.email" name="email" type="email" required>
+      </mat-form-field>
+
+      <mat-form-field class="me-24 fs-16" appearance="outline">
+        <mat-label>Contact</mat-label>
+        <input matInput [(ngModel)]="newEmp.contact" name="contact" type="email" required>
+      </mat-form-field>
+
+      <mat-form-field class="me-24 fs-16" appearance="outline" *ngIf="isFormEdit" >
+        <mat-label>Confirm password</mat-label>
+        <input matInput [(ngModel)]="newEmp.confirmPassword" name="confirmPassword" type="password" required>
+      </mat-form-field>
+
+      <mat-form-field class="me-24 fs-16" appearance="outline" *ngIf="isFormEdit" >
+        <mat-label>Password</mat-label>
+        <input matInput [(ngModel)]="newEmp.password" name="password" type="password" required>
+      </mat-form-field>
+  
+      <button mat-raised-button class="me-8 mb-8" (click)="closeNewEmployer()" type="button" >Close</button>
+      <button mat-raised-button class="me-8 mb-8 ml-auto" color="primary" type="submit" >Submit</button>
+    </form>
+
+    </div>
+  </div>
+  <div class="row">
+    <div [ngClass]="{'col-lg-8': isFullScreen, 'col-lg-12': isFullScreen}">
+      <mat-card class="w-100">
+        <mat-card-content>
+          <div class="row">
+            <mat-form-field>
+              <input matInput placeholder="Search" [(ngModel)]="searchTerm" (input)="onSearchChange()">
+            </mat-form-field>
+          </div>
+          <div class="row">
+            <div class="table-responsive">
+              <table class="table">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>First name</th>
+                      <th>Last name</th>
+                      <th>Email</th>
+                      <th>Contact</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let emp of employees;let i = index ">
+                      <td>{{ i + 1 }}</td>
+                      <td>{{ emp.firstName }}</td>
+                      <td>{{ emp.lastName }}</td>
+                      <td>{{ emp.email }}</td>
+                      <td>{{ emp.contact }}</td>
+                      <td>
+                        <button mat-icon-button class="me-8 mb-8" color="accent" (click)="showTask(emp._id)">
+                          <mat-icon>work</mat-icon> 
+                        </button>
+                        <button mat-icon-button class="me-8 mb-8" color="primary" (click)="onEdit(emp)">
+                          <mat-icon>edit</mat-icon> 
+                        </button>
+                        <button mat-icon-button class="me-8 mb-8" color="warn" (click)="onDelete(emp._id)">
+                          <mat-icon>delete</mat-icon> 
+                        </button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+            </div>
+          </div>
+        </mat-card-content>
+    </mat-card>
+    </div>
+    <div [ngClass]="{'col-lg-4': !isFullScreen, 'd-none': isFullScreen}">
+      <mat-card *ngIf="selectedEmp">
+        <mat-card-content>
+          <h4 class="mb-60">{{ selectedEmp?.firstName }}</h4>
+          <div class="d-flex" *ngFor="let activity of selectedEmp.tasksCompleted">
+            <p class="fw-bold ps-16 pe-20 fs-12">{{ activity.date | date:'yyyy-MM-dd' }}</p>
+            <p class="fw-bold ps-16 pe-20 fs-12">{{ activity.date | date: 'HH:mm' }}</p>
+            <div class="activity-border">
+              <div class="deep">
+                <div class="activity-ring">
+                  <div class="ring ring-success"></div>
+                </div>
+              </div>
+              <p class="ps-20 pe-16 activity-message">{{ 'Commission: '+activity.commissionAmount }}</p>
+              <p class="ps-20 pe-16 activity-message">{{ 'Service: '+activity.serviceId.name }}</p>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+  
+
+  

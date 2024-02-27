@@ -1,0 +1,37 @@
+<mat-card class="no-shadow">
+    <mat-card-content>
+    <div>
+        <canvas id="myChart" width="400" height="200"></canvas>
+    </div>
+    </mat-card-content>
+</mat-card>
+
+<mat-card class="w-100">
+    <mat-card-content>
+      <div class="row">
+        <div class="table-responsive">
+          <h3>Liste des taches</h3>
+          <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Service</th>
+                  <th>Date</th>
+                  <th>Heure</th>
+                  <th>Commission</th>
+                </tr>
+              </thead>
+              <tbody *ngIf="employees">
+                <tr *ngFor="let task of employees.tasksCompleted; let i = index ">
+                  <td>{{ i + 1 }}</td>
+                  <td>{{ task.serviceId.name }}</td>
+                  <td>{{ task.date | date:'yyyy-MM-dd' }}</td>
+                  <td>{{ task.date | date:'HH:mm' }}</td>
+                  <td>{{ task.commissionAmount+' Ar' }}</td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+      </div>
+    </mat-card-content>
+</mat-card>

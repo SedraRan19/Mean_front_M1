@@ -1,0 +1,27 @@
+<mat-card class="w-100">
+    <mat-card-content>
+        <h4 class="mb-32">Paiements clients</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nom</th>
+                    <th>Date rendez-vous</th>
+                    <th>Status</th>
+                    <th>Montant (Ar)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let res of dataTables;let i = index ">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ res.nom }}</td>
+                    <td>{{ res.date | date: 'yyyy-MM-dd' }}</td>
+                    <td>
+                        <span class="badge rounded-pill" [ngClass]="'badge-success'">{{ res.status }}</span>
+                    </td>
+                    <td>{{ res.montant }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </mat-card-content>
+</mat-card>

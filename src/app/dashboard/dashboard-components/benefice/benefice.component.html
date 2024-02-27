@@ -1,0 +1,62 @@
+<div class="container">
+    <div class="content">
+        <mat-card>
+            <mat-card-content>
+                <h4 class="mb-32">Bénéfice par jour</h4>
+                <mat-form-field class="me-24 fs-16" appearance="outline" class="narrow-date-input">
+                    <mat-label>Date</mat-label>
+                    <input matInput type="date" (change)="updateParJour()" [(ngModel)]="dateJour" name="dateJour" />
+                </mat-form-field>
+                <div class="max-width">
+                    <p>Commission totale des employés: {{ commissionParJour }} Ar</p>
+                    <p>Dépense totale: {{ depenseParJour }} Ar</p>
+                    <p>Benefice: {{ beneficeParJour }} Ar</p>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <div class="content">
+        <mat-card>
+            <mat-card-content>
+                <h4 class="mb-32">Bénéfice par mois</h4>
+                <mat-form-field class="me-24 fs-16" appearance="outline" class="narrow-date-input">
+                    <mat-label>Date</mat-label>
+                    <input matInput type="month" (change)="updateParMois()" [(ngModel)]="dateMois" name="dateMois" />
+                </mat-form-field>
+                <div class="max-width">
+                        <p>Commission totale des employés: {{ commissionParMois }} Ar</p>
+                        <p>Dépense totale: {{ depenseParMois }} Ar</p>
+                        <p>Benefice: {{ beneficeParMois }} Ar</p>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
+
+<style>
+    .container {
+        display: flex;
+        justify-content: space-around;
+        margin: 20px auto;
+        max-width: 1500px;
+    }
+
+    .content {
+        flex: 1;
+        margin: 0 10px;
+        text-align: center;
+    }
+
+    .max-width {
+        font-size: 24px;
+        padding: 10px 0;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+    }
+
+    .narrow-date-input {
+        width: 150px;
+    }
+</style>

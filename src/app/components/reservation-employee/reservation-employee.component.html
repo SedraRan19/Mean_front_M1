@@ -1,0 +1,80 @@
+<mat-card class="no-shadow">
+    <mat-card-content>
+      <mat-toolbar>
+        <h3>Reservations</h3>
+        <span class="example-spacer"></span>
+        <!-- <button mat-raised-button class="me-8 mb-8 ml-auto" color="primary" >New</button> -->
+      </mat-toolbar>
+    </mat-card-content>
+  </mat-card>
+  
+  <div *ngIf="loading">
+    <mat-spinner></mat-spinner>  
+  </div>
+  
+  <mat-card class="w-100">
+    <mat-card-content>
+      <div class="alert {{ alerts.border }} {{ alerts.color }} background-none d-flex fs-14 align-items-center rounded mb-16"
+      role="alert" *ngIf="alerts.message != ''">
+      <i-feather name="{{ alerts.icon }}" class="{{ alerts.iconColor }} feather-base me-12"></i-feather>
+      {{ alerts.message }}
+    </div>
+      <div class="row">
+        <mat-form-field>
+          <input matInput placeholder="Search" [(ngModel)]="searchTerm" (input)="onSearchChange()">
+        </mat-form-field>
+      </div>
+      <div class="row">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Client</th>
+              <th>Employer</th>
+              <th>Service</th>
+              <th>Date</th>
+              <th>Heure</th>
+              <th>Status</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let res of appointments; let i = index ">
+              <td>{{ i + 1 }}</td>
+              <td>{{ res.clientId.firstName + ' ' + res.clientId.lastName }}</td>
+              <td>
+                <ng-container *ngIf="res.requestedServices && res.requestedServices.length > 0">
+                  <div *ngFor="let service of res.requestedServices">
+                    {{ service.selectedEmployee.firstName + ' ' + service.selectedEmployee.lastName }}
+                  </div>
+                </ng-container>
+              </td>
+              <td>
+                <ng-container *ngIf="res.requestedServices && res.requestedServices.length > 0">
+                  <div *ngFor="let service of res.requestedServices">
+                    {{ service.serviceId.name }}
+                  </div>
+                </ng-container>
+              </td>
+              <td [style.color]="isDatePassed(res.appointmentDate) ? 'red' : 'inherit'">{{ res.appointmentDate | date: 'yyyy-MM-dd' }}</td>
+              <td>{{ res.appointmentDate | date: 'HH:mm' }}</td>
+              <td>
+                <span class="badge rounded-pill" [ngClass]="{
+                  'badge-success': res.status === 'Confirmed',
+                  'badge-warning': res.status === 'Pending',
+                  'badge-danger': res.status === 'Cancelled'
+                }">{{ res.status }}</span>
+              </td>
+              <td>
+                <button mat-raised-button class="me-8 mb-8" color="primary" (click)="onDone(res)">
+                  Done
+                </button>                
+              </td>          
+            </tr>
+            
+          </tbody>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+  

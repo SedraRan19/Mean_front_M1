@@ -1,0 +1,32 @@
+<div *ngIf="loading">
+    <mat-spinner></mat-spinner>  
+  </div>
+  
+    <div class="row mt-5" >
+      <div class="col-lg-4" *ngFor="let service of services">
+        <mat-card class="overflow-hidden">
+          <div>
+            <img src="{{ cards[0].image }}" class="w-100" id="image" alt="">
+          </div>
+          <mat-card-content>
+            <div>
+              <p class="fs-18 lh-lg fw-medium">
+                {{ service.name }}
+              </p>
+              <p class="op-7">
+                {{ 'Prix: '+service.price+'  Durée: '+service.duration+'h'}}
+              </p>
+              <p class="op-7">
+                {{ service.description }}
+              </p>
+              <div class="row">
+                <div class="col-lg-8">
+                  <button mat-flat-button color ="primary" class="fw-normal mt-4" (click)="onAppointment()" >Prendre un rendez-vous</button>
+                </div>
+              </div>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  

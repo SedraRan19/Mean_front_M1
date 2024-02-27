@@ -1,0 +1,32 @@
+<mat-card class="no-shadow">
+    <mat-card-content>
+        <mat-toolbar>
+            <h3>Gestion des préférences</h3>
+            <span class="example-spacer"></span>
+        </mat-toolbar>
+        <div class="card-body">
+            <form >
+
+                <mat-form-field class="me-24 fs-16" appearance="outline" >
+                    <mat-label>Employee</mat-label>
+                    <mat-select [(ngModel)]="newPreference.employeeId" name="employee">
+                        <mat-option *ngFor="let Employee of employees" [value]="Employee._id">
+                            {{ Employee.firstName+' '+Employee.lastName }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <mat-form-field class="me-24 fs-16" appearance="outline">
+                    <mat-label>Service</mat-label>
+                    <mat-select [(ngModel)]="newPreference.serviceId" name="service">
+                        <mat-option *ngFor="let service of services" [value]="service._id">
+                            {{ service.name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
+                <button mat-raised-button class="me-8 mb-8 ml-auto" type="submit" color="primary" (click)="addPreferrence()" >Valider</button>
+            </form>
+        </div>
+    </mat-card-content>
+</mat-card>

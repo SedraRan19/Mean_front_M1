@@ -1,0 +1,82 @@
+<!-- <app-sales></app-sales> -->
+
+<app-temp-moyen-travail-employe></app-temp-moyen-travail-employe>
+
+<div class="row">
+  <div class="col-lg-6" >
+    <app-nb-reservation></app-nb-reservation>
+  </div>
+  <div class="col-lg-6" >
+    <app-chiffre-affaire></app-chiffre-affaire>
+  </div>
+</div>
+
+<app-benefice></app-benefice>
+
+<mat-card class="w-100">
+  <mat-card-content>
+    <h3>Rendez-vous de cette semaine (Drag and Drop)</h3>
+    <div cdkDropListGroup class="row mt-3">
+      <div class="col-lg-4">    
+        <div class="example-container">
+          <h2 style="color: rgb(254, 212, 105);">Pending</h2>
+          <div cdkDropList [cdkDropListData]="appointmentPending" class="example-list" (cdkDropListDropped)="drop($event)">
+            <div *ngFor="let item of appointmentPending" class="example-box" cdkDrag [cdkDragData]="item">
+              <p>{{item.clientId.firstName+' '+item.clientId.lastName}}</p>
+              <p>{{ item.appointmentDate | date: 'yyyy-MM-dd' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="example-container">
+          <h2 style="color: rgb(78, 178, 249);">Confirmed</h2>
+          <div cdkDropList [cdkDropListData]="appointmentConfirmed" class="example-list" (cdkDropListDropped)="drop($event)">
+            <div *ngFor="let item of appointmentConfirmed" class="example-box" cdkDrag [cdkDragData]="item">
+              <p>{{item.clientId.firstName+' '+item.clientId.lastName}}</p>
+              <p>{{ item.appointmentDate | date: 'yyyy-MM-dd' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-4">
+        <div class="example-container">
+          <h2 style="color: rgb(247, 105, 105);">Cancelled</h2>
+          <div cdkDropList [cdkDropListData]="appointmentCancelled" class="example-list" (cdkDropListDropped)="drop($event)">
+            <div *ngFor="let item of appointmentCancelled" class="example-box" cdkDrag [cdkDragData]="item">
+              <p>{{item.clientId.firstName+' '+item.clientId.lastName}}</p>
+              <p>{{ item.appointmentDate | date: 'yyyy-MM-dd' }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </mat-card-content>
+</mat-card>
+
+<app-paiement-client></app-paiement-client>
+
+
+<div class="row mt-5">
+  <div class="col-lg-4" *ngFor="let service of services">
+    <mat-card class="overflow-hidden">
+      <div>
+        <img src="{{ cards[0].image }}" class="w-100" id="image" alt="">
+      </div>
+      <mat-card-content>
+        <div>
+          <p class="fs-18 lh-lg fw-medium">
+            {{ service.name }}
+          </p>
+          <p class="op-7">
+            {{ service.description }}
+          </p>
+            <button mat-flat-button color ="primary" class="fw-normal mt-4" (click)="voirPlus()">Voir plus</button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<!-- <app-cards></app-cards> -->

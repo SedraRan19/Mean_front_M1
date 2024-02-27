@@ -1,0 +1,81 @@
+<mat-card class="no-shadow">
+  <mat-card-content>
+    <mat-toolbar>
+      <h3>Services</h3>
+      <span class="example-spacer"></span>
+      <button mat-raised-button class="me-8 mb-8 ml-auto" color="primary" (click)="openNewService()">New</button>
+    </mat-toolbar>
+  </mat-card-content>
+</mat-card>
+
+<div class="card" [ngClass]="{'visible': isVisibleFrom, 'hidden': !isVisibleFrom}" >
+  <div class="card-body">
+    <h4 class="mb-32">New service</h4>
+    <form (ngSubmit)="onSubmit()">
+
+    <mat-form-field class="me-24 fs-16" appearance="outline">
+      <mat-label>Name</mat-label>
+      <input matInput [(ngModel)]="newService.name" name="name" required>
+    </mat-form-field>
+
+    <mat-form-field class="me-24 fs-16" appearance="outline">
+      <mat-label>Duration</mat-label>
+      <input matInput type="number" [(ngModel)]="newService.duration" name="duriton" required>
+    </mat-form-field>
+
+    <mat-form-field class="me-24 fs-16" appearance="outline">
+      <mat-label>Price</mat-label>
+      <input matInput type="number" [(ngModel)]="newService.price" name="price">
+    </mat-form-field>
+
+    <mat-form-field class="me-24 fs-16" appearance="outline">
+      <mat-label>Commission</mat-label>
+      <input matInput type="number" [(ngModel)]="newService.commissionPercentage" name="commissionPercentage">
+    </mat-form-field>
+
+    <mat-form-field class="me-24 fs-16" appearance="outline">
+      <mat-label>Description</mat-label>
+      <textarea matInput rows="5" placeholder="Enter description" [(ngModel)]="newService.description" name="description"></textarea>
+    </mat-form-field>
+    
+    <button mat-raised-button class="me-8 mb-8" type="button" (click)="closeNewService()">Close</button>
+    <button mat-raised-button class="me-8 mb-8 ml-auto" color="primary" type="submit" >Submit</button>
+    </form>
+  </div>
+</div>
+
+<div *ngIf="loading">
+  <mat-spinner></mat-spinner>  
+</div>
+
+  <div class="row mt-5" >
+    <div class="col-lg-4" *ngFor="let service of services">
+      <mat-card class="overflow-hidden">
+        <div>
+          <img src="{{ cards[0].image }}" class="w-100" id="image" alt="">
+        </div>
+        <mat-card-content>
+          <div>
+            <p class="fs-18 lh-lg fw-medium">
+              {{ service.name }}
+            </p>
+            <p class="op-7">
+              {{ 'Price: '+service.price+'  Commission: '+service.commissionPercentage+' Duration: '+service.duration+'h'}}
+            </p>
+            <p class="op-7">
+              {{ service.description }}
+            </p>
+            <div class="row">
+              <div class="col-lg-8">
+                <button mat-flat-button color ="primary" class="fw-normal mt-4" (click)="onEdit(service)">Edit</button>
+              </div>
+              <div class="col-lg-4 ms-2">
+                <button mat-flat-button color="warn" (click)="onDelete(service._id)" class="fw-normal mt-4 ml-auto">Delete</button>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+

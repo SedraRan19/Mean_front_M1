@@ -1,0 +1,61 @@
+<div *ngIf="message != '' && !valide" class="alert alert-danger alert-text-danger d-flex fs-14 align-items-center rounded mb-16" role="alert">
+  <i-feather name="alert-circle" class="text-danger feather-base me-12"></i-feather>
+  {{message}}
+</div>
+
+<div *ngIf="validationErrors.length > 0 && !valide" class="alert alert-danger alert-text-danger d-flex fs-14 align-items-center rounded mb-16" role="alert">
+  <i-feather name="alert-circle" class="text-danger feather-base me-12"></i-feather>
+  {{validationErrors}}
+</div>
+
+<div *ngIf="message != '' && valide" class="alert alert-success alert-text-success d-flex fs-14 align-items-center rounded mb-16" role="alert">
+  <i-feather name="check-circle" class="text-success feather-base me-12"></i-feather>
+  {{message}}
+</div>
+
+<div class="card">
+    <div class="card-body">
+      <h4 class="mb-32">Inscription</h4>
+      <form>
+        <mat-form-field class="w-100 fs-16" appearance="outline">
+          <mat-label>Nom</mat-label>
+          <input matInput type="text" placeholder="Entrez votre nom" name="lastname"  [(ngModel)]="lastName">
+        </mat-form-field>
+
+        <mat-form-field class="w-100 fs-16" appearance="outline">
+            <mat-label>Prénom</mat-label>
+            <input matInput type="text" placeholder="Entrez votre prénom" name="firstname"  [(ngModel)]="firstName">
+        </mat-form-field>
+  
+        <mat-form-field class="w-100 fs-16" appearance="outline">
+          <mat-label>Email</mat-label>
+          <input matInput type="email" placeholder="Entez votre email" name="email"  [(ngModel)]="email">
+        </mat-form-field>
+
+        <mat-form-field class="w-100 fs-16" appearance="outline">
+            <mat-label>Contact</mat-label>
+            <input matInput type="text" placeholder="Entez votre contact" name="contact"  [(ngModel)]="contact">
+        </mat-form-field>
+  
+        <mat-form-field class="w-100 fs-16" appearance="outline">
+          <mat-label>Mot de passe</mat-label>
+          <input matInput type="password" placeholder="Entrez votre mot de passe" name="password"  [(ngModel)]="password">
+        </mat-form-field>
+
+        <mat-form-field class="w-100 fs-16" appearance="outline">
+          <mat-label>Confirmation mot de passe</mat-label>
+          <input matInput type="password" placeholder="Confirmez votre mot de passe" name="confirm-password"  [(ngModel)]="confirmPassword">
+        </mat-form-field>
+        
+        <button 
+          mat-raised-button class="me-8 mb-8" color="primary" type="submit" [disabled]="isSubmitting || (contact.length <= 0 || lastName.length <= 0 || firstName.length <= 0 || password.length <= 0 || email.length <= 0 || confirmPassword.length <= 0)"
+          (click)="registerAction()">S'inscrire
+        </button>
+      </form>
+      <p class="text-center">Déjà un compte existant ?
+        <a routerLink="/login-client" href="/login-client"> 
+        Se connecter
+        </a>
+      </p>
+    </div>
+</div>

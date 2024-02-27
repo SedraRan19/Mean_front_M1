@@ -1,0 +1,58 @@
+<div class="container">
+    <div class="content">
+        <mat-card>
+            <mat-card-content>
+                <h4 class="mb-32">Réservation par jour</h4>
+                <mat-form-field class="me-24 fs-16" appearance="outline" class="narrow-date-input">
+                    <mat-label>Date</mat-label>
+                    <input matInput type="date" (change)="updateReservationParJour()" [(ngModel)]="dateJour" name="dateJour" />
+                </mat-form-field>
+                <div class="max-width">
+                    {{ nbReservationParJour }}
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <div class="content">
+        <mat-card>
+            <mat-card-content>
+                <h4 class="mb-32">Réservation par mois</h4>
+                <mat-form-field class="me-24 fs-16" appearance="outline" class="narrow-date-input" >
+                    <mat-label>Date</mat-label>
+                    <input matInput type="month" (change)="updateReservationParMois()" [(ngModel)]="dateMois" name="dateMois" />
+                </mat-form-field>
+                <div class="max-width">
+                    {{ nbReservationParMois }}
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
+
+<style>
+    .container {
+        display: flex;
+        justify-content: space-around;
+        margin: 20px auto;
+        max-width: 1500px;
+    }
+
+    .content {
+        flex: 1;
+        margin: 0 10px;
+        text-align: center;
+    }
+
+    .max-width {
+        font-size: 24px;
+        padding: 10px 0;
+        background-color: #f0f0f0;
+        border-radius: 5px;
+    }
+
+    .narrow-date-input {
+        width: 150px;
+    }
+</style>

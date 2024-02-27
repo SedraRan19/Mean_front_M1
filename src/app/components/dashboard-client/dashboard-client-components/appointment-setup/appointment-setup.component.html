@@ -1,0 +1,185 @@
+<mat-card class="no-shadow">
+    <mat-card-content>
+        <mat-toolbar>
+            <h3>Prise de rendez-vous</h3>
+            <span class="example-spacer"></span>
+            <button mat-raised-button class="me-8 mb-8 ml-auto" color="primary"
+                (click)="openNewReservation()">Nouveau</button>
+        </mat-toolbar>
+    </mat-card-content>
+</mat-card>
+
+<div class="card" *ngIf="isVisibleFrom">
+    <div class="card-body">
+        <h4 class="mb-32">Nouveau rendez-vous</h4>
+        <form (ngSubmit)="onSubmit()">
+
+            <mat-form-field class="me-24 fs-16" appearance="outline" *ngIf="isEditEnabled">
+                <mat-label>Employee</mat-label>
+                <mat-select [(ngModel)]="newAppoint.requestedServices[0].selectedEmployee" name="employee">
+                    <mat-option *ngFor="let Employee of employees" [value]="Employee._id">
+                        {{ Employee.firstName+' '+Employee.lastName }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="me-24 fs-16" appearance="outline" *ngIf="isEditEnabled">
+                <mat-label>Service</mat-label>
+                <mat-select [(ngModel)]="newAppoint.requestedServices[0].serviceId" name="service">
+                    <mat-option *ngFor="let service of services" [value]="service._id">
+                        {{ service.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="me-24 fs-16" appearance="outline">
+                <mat-label>Date</mat-label>
+                <input matInput type="datetime-local" [(ngModel)]="newAppoint.appointmentDate" name="appointmentDate" />
+            </mat-form-field>
+
+            <button mat-raised-button class="me-8 mb-8" type="button" (click)="closeNewReservation()">Fermer</button>
+            <button mat-raised-button class="me-8 mb-8 ml-auto" type="submit" color="primary">Valider</button>
+        </form>
+    </div>
+</div>
+
+<div class="card" *ngIf="isFormService">
+    <div class="card-body">
+        <h4 class="mb-32">Service</h4>
+        <form (ngSubmit)="onSubmitService()">
+
+            <mat-form-field class="me-24 fs-16" appearance="outline">
+                <mat-label>Employee</mat-label>
+                <mat-select [(ngModel)]="newService.requestedServices[0].selectedEmployee" name="employee">
+                    <mat-option *ngFor="let Employee of employees" [value]="Employee._id">
+                        {{ Employee.firstName+' '+Employee.lastName }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <mat-form-field class="me-24 fs-16" appearance="outline">
+                <mat-label>Service</mat-label>
+                <mat-select [(ngModel)]="newService.requestedServices[0].serviceId" name="service">
+                    <mat-option *ngFor="let service of services" [value]="service._id">
+                        {{ service.name }}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+
+            <button mat-raised-button class="me-8 mb-8" type="button" (click)="closeNewServise()">Fermer</button>
+            <button mat-raised-button class="me-8 mb-8 ml-auto" type="submit" color="primary">Valider</button>
+        </form>
+    </div>
+</div>
+
+<div *ngIf="loading">
+    <mat-spinner></mat-spinner>
+</div>
+
+
+<mat-card class="w-100" *ngIf="isServiceVisible && selectedAppointment && selectedAppointment[0]">
+    <mat-card-content>
+        <h4 class="mb-32">Les services du rendez-vous</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Employer</th>
+                    <th>Service</th>
+                    <th>Durée (h)</th>
+                    <th>Prix</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let req of selectedAppointment[0].requestedServices; let i = index">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ req.selectedEmployee.firstName + ' ' + req.selectedEmployee.lastName }}</td>
+                    <td>{{ req.serviceId.name }}</td>
+                    <td>{{ req.serviceId.duration }}</td>
+                    <td>{{ req.serviceId.price }}</td>
+                    <td>
+                        <button mat-raised-button class="me-8 mb-8" color="primary"
+                            (click)="onEdit(selectedAppointment[0], req)">Modifier</button>
+                        <button mat-raised-button class="me-8 mb-8" color="warn"
+                            (click)="onDeleteRequestedServiceAppointment(selectedAppointment[0]._id, req._id)">Supprimer</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </mat-card-content>
+</mat-card>
+
+<mat-card class="w-100" *ngIf="isPaymentVisible">
+    <mat-card-content>
+        <div *ngIf="payment_error" class="alert alert-danger alert-text-danger d-flex fs-14 align-items-center rounded mb-16" role="alert">
+            <i-feather name="alert-circle" class="text-danger feather-base me-12"></i-feather>
+            {{ message_payment }}
+        </div>
+
+        <div *ngIf="payment_succes" class="alert alert-success alert-text-success d-flex fs-14 align-items-center rounded mb-16" role="alert">
+            <i-feather name="check-circle" class="text-success feather-base me-12"></i-feather>
+            {{ message_payment }}
+        </div>
+        <h3 class="mb-32">Paiement rendez-vous</h3>
+        <form (ngSubmit)="onSubmitPayment()">
+            <h4 class="mb-32">Montant total service : {{ total_amount }} Ar</h4>
+            <mat-form-field class="me-24 fs-16" appearance="outline">
+                <mat-label>Montant</mat-label>
+                <input matInput [(ngModel)]="entered_amount" type="number" name="entered_amount">
+            </mat-form-field>
+
+            <mat-form-field class="me-24 fs-16" appearance="outline">
+                <mat-label>Carte bancaire (16 chiffres)</mat-label>
+                <input matInput [(ngModel)]="credit_card" name="credit_card">
+            </mat-form-field>
+
+            <button mat-raised-button class="me-8 mb-8" type="button" (click)="onClosePayment()">Fermer</button>
+            <button mat-raised-button class="me-8 mb-8 ml-auto" type="submit" color="primary">Payer</button>
+        </form>
+    </mat-card-content>
+</mat-card>
+
+<mat-card class="w-100">
+    <mat-card-content>
+        <h4 class="mb-32">Historiques</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let res of appointments;let i = index ">
+                    <td>{{ i + 1 }}</td>
+                    <td>{{ res.appointmentDate | date: 'yyyy-MM-dd' }} à {{ res.appointmentDate | date: 'HH:mm' }}</td>
+                    <td>
+                        <span class="badge rounded-pill" [ngClass]="{
+                'badge-success': res.status === 'Confirmed',
+                'badge-warning': res.status === 'Pending',
+                'badge-danger': res.status === 'Cancelled'
+              }">{{ res.status }}</span>
+                    </td>
+                    <td>
+                        <button mat-icon-button color="basic" (click)="onAdd(res)">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                        <button mat-icon-button color="basic" (click)="onService(res._id)">
+                            <mat-icon>information</mat-icon>
+                        </button>
+                        <button mat-icon-button color="warn" (click)="onDelete(res._id)">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                        <button *ngIf="res.status == 'Pending'" mat-icon-button color="primary"
+                            (click)="onPayment(res)">
+                            <mat-icon>attach_money</mat-icon>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </mat-card-content>
+</mat-card>
